@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import Header from "./Header";
 import TableGroup from "./TableGroup";
+import { calculateInvestmentResults } from "./util/investment";
 
 function App() {
     let yearMatrix = []
@@ -22,6 +23,17 @@ function App() {
     }
     
     
+    function mapInvestments(){
+      let v = calculateInvestmentResults({
+        initialInvestment: 10000,
+        annualInvestment: 2000,
+        expectedReturn: 5, // 5% expected return
+        duration: 10,
+      });
+      console.log(v);
+    }
+
+    mapInvestments()
 
     function handleInputChange (event) {
       const inputName =  event.target.name;
