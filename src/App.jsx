@@ -15,10 +15,28 @@ function App() {
 
 
     function numberOfYears(numberOfYears) {
-        let initialYearMatrix = []; 
+        let initialYearMatrix = [];
+        let investments = calculateInvestmentResults({
+          initialInvestment: 10000,
+          annualInvestment: 2000,
+          expectedReturn: 5, // 5% expected return
+          duration: numberOfYears,
+        });
+
         for (let i = 0; i < numberOfYears; i++) {
             initialYearMatrix.push([i + 1, 0.0000, 0.0000, 0.0000, 0.0000]);
         }
+
+        for (let i in investments){
+          let initial = initialYearMatrix[i];
+        
+          initial[1] = investments[i]['valueEndOfYear']
+          initial[2] = investments[i]['interest']
+          initial[3] = investments[i]['interest']
+          initial[4] = investments[i]['annualInvestment']
+
+        };
+        console.log(initialYearMatrix)
         yearMatrix = initialYearMatrix;
     }
     
