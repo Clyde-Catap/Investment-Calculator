@@ -90,3 +90,7 @@ body {
 #row {
   margin: 1rem;
 }
+
+input::placeholder {
+  color: #c2e9e0;
+}
