@@ -18,20 +18,58 @@ function App() {
     const [duration, updateDuration] = useState('');
 
 
-    function numberOfYears(numberOfYears) {
+    function handleInputChange (event) {
+
+      const inputName =  event.target.name;
+      const inputValue = Number(event.target.value);
+      if (inputName == "DURATION"){
+          compute(inputValue);
+          updateMatrix(investmentMatrix);
+          updateDuration(inputValue)
+      }
+      if (inputName == "INITIAL INVESTMENT") {
+        updateInitialInvestment(inputValue);
+        if (duration != "") {
+            compute(duration,inputValue,null,null);
+            updateMatrix(investmentMatrix);
+
+        }
+
+      }
+      if (inputName == "EXPECTED RETURN") {
+        updateExpectedReturn(inputValue);
+        if (duration != "") {
+            compute(duration,null,null,inputValue);
+            updateMatrix(investmentMatrix);
+        }
+
+      }
+      if (inputName == "ANNUAL INVESTMENT") {
+        updateAnnualInvestment(inputValue);
+        if (duration != "") {
+            compute(duration,null,inputValue,null);
+            updateMatrix(investmentMatrix);
+        }
+
+      }    
+
+    }
+
+
+    function compute(numberOfYears, initialInv = null, annualInv = null, expectedRet = null) {
         let initialYearMatrix = [];
 
         for (let i = 0; i < Number(numberOfYears); i++) {
             let investments = calculateInvestmentResults({
-                initialInvestment: Number(initialInvestment),
-                annualInvestment: Number(annualInvestment),
-                expectedReturn: Number(expectedReturn),
+                initialInvestment: Number(initialInv ?? initialInvestment),
+                annualInvestment: Number(annualInv ?? annualInvestment),
+                expectedReturn: Number(expectedRet ?? expectedReturn),
                 duration: Number(i+1),
               });
 
             let computedInterest = Number(investments[i]['interest']);
             let computedTotalInterest = computeTotalInterest(investments);
-            let totalInvestedCapital = computeInvestedCapital(Number(initialInvestment), Number(annualInvestment), Number(i+1));
+            let totalInvestedCapital = computeInvestedCapital(Number(initialInv ?? initialInvestment), Number(annualInv ?? annualInvestment), Number(i+1));
             let computedInvestedValue = Number(investments[i]['valueEndOfYear']);
 
             initialYearMatrix.push([i + 1, "$" + computedInvestedValue.toFixed(2), "$" + computedInterest.toFixed(2), "$" + computedTotalInterest.toFixed(2), "$" + totalInvestedCapital.toFixed(2)]);
@@ -39,7 +77,8 @@ function App() {
 
         investmentMatrix = initialYearMatrix;
     }
-    function computeTotalInterest (investments){
+
+    function computeTotalInterest(investments){
         let computedTotalInterest = 0;
         for (let i in investments){
             computedTotalInterest += investments[i]['interest']
@@ -52,46 +91,6 @@ function App() {
         totalInvestedCapital += ((numberOfYears)*annualCapital)
 
         return totalInvestedCapital;
-    }
-
-    
-    
-
-    function handleInputChange (event) {
-
-      const inputName =  event.target.name;
-      const inputValue = Number(event.target.value);
-      if(inputName == "DURATION"){
-          numberOfYears(inputValue);
-          updateMatrix(investmentMatrix);
-          updateDuration(inputValue)
-      }
-      if (inputName == "INITIAL INVESTMENT") {
-        updateInitialInvestment(inputValue);
-        console.log(typeof inputValue)
-        if (duration != "") {
-            numberOfYears(duration);
-            updateMatrix(investmentMatrix);
-        }
-
-      }
-      if (inputName == "EXPECTED RETURN") {
-        updateExpectedReturn(inputValue);
-        if (duration != "") {
-            numberOfYears(duration);
-            updateMatrix(investmentMatrix);
-        }
-
-      }
-      if (inputName == "ANNUAL INVESTMENT") {
-        updateAnnualInvestment(inputValue);
-        if (duration != "") {
-            numberOfYears(duration);
-            updateMatrix(investmentMatrix);
-        }
-
-      }    
-
     }
 
     return (
